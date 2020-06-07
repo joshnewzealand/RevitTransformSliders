@@ -227,7 +227,7 @@ namespace myChild1
 
                         myWindow1.myLabel_Setting.Content = myWindow1.mySlider.Value.ToString();
 
-                        if (myIntTimeOut == 200)
+                        if (myIntTimeOut == 400)
                         {
                             MessageBox.Show("Timeout");
                             break;
