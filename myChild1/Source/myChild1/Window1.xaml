@@ -114,9 +114,9 @@
                 <ScaleTransform  CenterX="0" CenterY="0" ScaleX="2" ScaleY="2" />
             </Slider.LayoutTransform>
         </Slider>
-        <Label Content="BasisX" HorizontalAlignment="Left" Margin="425,126,0,0" VerticalAlignment="Top" Width="46"/>
-        <Label Content="BasisY" HorizontalAlignment="Left" Margin="425,208,0,0" VerticalAlignment="Top" Width="53"/>
-        <Label Content="BasisZ" HorizontalAlignment="Left" Margin="425,290,0,0" VerticalAlignment="Top" Width="57"/>
+        <Label Content="BasisX normal" HorizontalAlignment="Left" Margin="411,126,0,0" VerticalAlignment="Top" Width="87"/>
+        <Label Content="BasisY normal" HorizontalAlignment="Left" Margin="411,208,0,0" VerticalAlignment="Top" Width="87"/>
+        <Label Content="BasisZ normal" HorizontalAlignment="Left" Margin="411,290,0,0" VerticalAlignment="Top" Width="87"/>
         <Button x:Name="myButton_PlaceCenterAGM" Content="Place AGM" HorizontalAlignment="Left" Margin="172,19,0,0" VerticalAlignment="Top" Width="126" Height="42" HorizontalContentAlignment="Center" Click="myButton_PlaceCenterAGM_Click" />
         <Button x:Name="myButton_PlaceAGM_A" Content="Place AGM-A" HorizontalAlignment="Left" Margin="903,115,0,0" VerticalAlignment="Top" Width="122" Height="27" HorizontalContentAlignment="Center" Click="myButton_PlaceAGM_A_Click" />
         <Button x:Name="myButton_PlaceAGM_B" Content="Place AGM-B" HorizontalAlignment="Left" Margin="903,290,0,0" VerticalAlignment="Top" Width="122" Height="27" HorizontalContentAlignment="Center" Click="myButton_PlaceAGM_B_Click" />
