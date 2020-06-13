@@ -142,6 +142,12 @@
         "Entry"
         {
         "MsmKey" = "8:_49923884AAB565E950B3D6BE15A90924"
+        "OwnerKey" = "8:_C9410214D1CD7EEEC90B51765774929E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_49923884AAB565E950B3D6BE15A90924"
         "OwnerKey" = "8:_46001E8FC84AD1C3A4BA952691CBF3F8"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1040,15 +1046,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CSharp PLAYPEN II Google 'Josh API Revit'"
-        "ProductCode" = "8:{818753DC-FE6B-4907-A8BA-C0E9DEFE0428}"
-        "PackageCode" = "8:{61C6E329-E1D3-4A72-B20E-C6BBBEB89585}"
+        "ProductCode" = "8:{6C7B8A8D-238B-4351-96E8-C167ACAC3C87}"
+        "PackageCode" = "8:{10802B0A-6EA8-42B0-854A-9E11C230181C}"
         "UpgradeCode" = "8:{9B604E80-DD6A-4CDD-94F9-201A4C8F21D8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.13"
+        "ProductVersion" = "8:1.0.14"
         "Manufacturer" = "8:Default Company Name"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
