@@ -228,7 +228,7 @@ namespace myChild1
             else
             {
                 XYZ axis = myTransform_FakeBasis33333.BasisZ.CrossProduct(-XYZ.BasisZ);
-                myTransformFromQuatX = Transform.CreateRotationAtPoint(axis, aaMega_QuatX, XYZ.Zero);
+                myTransformFromQuatX = Transform.CreateRotationAtPoint(axis, aaMega_QuatX, XYZ.Zero); //step 1, extration
             }
 
             Transform myTransformFromQuatXX;
@@ -238,36 +238,36 @@ namespace myChild1
             else
             {
                 XYZ axis = myTransform_FakeBasis44444.BasisZ.CrossProduct(-XYZ.BasisZ);
-                myTransformFromQuatXX = Transform.CreateRotationAtPoint(axis, aaMega_QuatXX, XYZ.Zero);
+                myTransformFromQuatXX = Transform.CreateRotationAtPoint(axis, aaMega_QuatXX, XYZ.Zero); //step 1, extration
             }
 
             Transform myEndPointTransform = Transform.Identity;
-            myEndPointTransform.BasisX = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisX);
-            myEndPointTransform.BasisY = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisY);
-            myEndPointTransform.BasisZ = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisZ);
+            myEndPointTransform.BasisX = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisX); //step 1, extration
+            myEndPointTransform.BasisY = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisY); //step 1, extration
+            myEndPointTransform.BasisZ = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisZ); //step 1, extration
 
             Transform myEndPointTransformFor333 = Transform.Identity;
-            myEndPointTransformFor333.BasisX = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisX);
-            myEndPointTransformFor333.BasisY = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisY);
-            myEndPointTransformFor333.BasisZ = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisZ);
-
-            double angle = myEndPointTransform.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ);
-            double d1_Final = myEndPointTransformFor333.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ);
+            myEndPointTransformFor333.BasisX = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisX); //step 1, extration
+            myEndPointTransformFor333.BasisY = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisY); //step 1, extration
+            myEndPointTransformFor333.BasisZ = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisZ); //step 1, extration
 
             Numerics.Vector3 myQuat = new Numerics.Vector3();
-            myQuat.X = (float)myTransform_FakeBasis33333.BasisZ.X;
-            myQuat.Y = (float)myTransform_FakeBasis33333.BasisZ.Y;
-            myQuat.Z = (float)myTransform_FakeBasis33333.BasisZ.Z;
+            myQuat.X = (float)myTransform_FakeBasis33333.BasisZ.X; //step 2, combining z basis 
+            myQuat.Y = (float)myTransform_FakeBasis33333.BasisZ.Y; //step 2, combining z basis 
+            myQuat.Z = (float)myTransform_FakeBasis33333.BasisZ.Z; //step 2, combining z basis 
 
             Numerics.Vector3 myQuat2 = new Numerics.Vector3();
-            myQuat2.X = (float)myTransform_FakeBasis44444.BasisZ.X;
-            myQuat2.Y = (float)myTransform_FakeBasis44444.BasisZ.Y;
-            myQuat2.Z = (float)myTransform_FakeBasis44444.BasisZ.Z;
+            myQuat2.X = (float)myTransform_FakeBasis44444.BasisZ.X; //step 2, combining z basis 
+            myQuat2.Y = (float)myTransform_FakeBasis44444.BasisZ.Y; //step 2, combining z basis 
+            myQuat2.Z = (float)myTransform_FakeBasis44444.BasisZ.Z; //step 2, combining z basis 
+
+            double angle = myEndPointTransform.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, z normal combining rotation
+            double d1_Final = myEndPointTransformFor333.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, z normal combining rotation
 
             foreach (float myFloat in myListfloat)
             {
 
-                Numerics.Vector3 myQuat3 = Numerics.Vector3.Lerp(myQuat2, myQuat, myFloat);
+                Numerics.Vector3 myQuat3 = Numerics.Vector3.Lerp(myQuat2, myQuat, myFloat); //step 2, combining z basis 
 
                 Transform myTransformFromQuat_Final = Transform.Identity;
                 if (true)
@@ -282,14 +282,13 @@ namespace myChild1
                     }
                 }
 
-                double myDoubleAlmostThere = (angle * (1 - myFloat)) + (d1_Final * (myFloat));
-
-                Transform myEndPointTransform_JustOnceSide = Transform.CreateRotationAtPoint(myTransformFromQuat_Final.BasisZ, myDoubleAlmostThere, XYZ.Zero);
+                double myDoubleAlmostThere = (angle * (1 - myFloat)) + (d1_Final * (myFloat)); //step 3, z normal combining rotation
+                Transform myEndPointTransform_JustOnceSide = Transform.CreateRotationAtPoint(myTransformFromQuat_Final.BasisZ, myDoubleAlmostThere, XYZ.Zero); //step 3, z normal combining rotation
 
                 Transform myTransformFromQuat_AllNewFinal = Transform.Identity;
-                myTransformFromQuat_AllNewFinal.BasisX = myEndPointTransform_JustOnceSide.OfVector(myTransformFromQuat_Final.BasisX);
-                myTransformFromQuat_AllNewFinal.BasisY = myEndPointTransform_JustOnceSide.OfVector(myTransformFromQuat_Final.BasisY);
-                myTransformFromQuat_AllNewFinal.BasisZ = myEndPointTransform_JustOnceSide.OfVector(myTransformFromQuat_Final.BasisZ);
+                myTransformFromQuat_AllNewFinal.BasisX = myEndPointTransform_JustOnceSide.OfVector(myTransformFromQuat_Final.BasisX); //step 4, bringing it all together 
+                myTransformFromQuat_AllNewFinal.BasisY = myEndPointTransform_JustOnceSide.OfVector(myTransformFromQuat_Final.BasisY); //step 4, bringing it all together
+                myTransformFromQuat_AllNewFinal.BasisZ = myEndPointTransform_JustOnceSide.OfVector(myTransformFromQuat_Final.BasisZ); //step 4, bringing it all together
 
                 Transform t = myTransformFromQuat_AllNewFinal;
 

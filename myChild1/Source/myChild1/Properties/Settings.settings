@@ -9,10 +9,10 @@
       <Value Profile="(Default)">300</Value>
     </Setting>
     <Setting Name="Width" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">500</Value>
+      <Value Profile="(Default)">1050</Value>
     </Setting>
     <Setting Name="Height" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">700</Value>
+      <Value Profile="(Default)">500</Value>
     </Setting>
     <Setting Name="LastMiddle" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
