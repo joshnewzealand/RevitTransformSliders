@@ -725,6 +725,7 @@ namespace myChild1
 
                     myLabel_Progress.Content = "In Progress";
                     mySlideInProgress = true;
+                    myEE01_Part1_Interpolate.myBool_Cycle = false;
                     myExternalEvent_EE01_Part1_Interpolate.Raise();
                 }
             }
@@ -1266,5 +1267,57 @@ namespace myChild1
             #endregion
         }
 
+        private void MyButton_Cycle_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (true)  //candidate for methodisataion 202006061646
+                {
+
+                    if (myIntUpDown_Middle2.Value.Value == 0)
+                    {
+                        MessageBox.Show("Set or Place AGM first please.");
+                        return;
+                    }
+
+                    if (myIntUpDown_A.Value.Value == 0)
+                    {
+                        MessageBox.Show("Set or Place AGM-A first please.");
+                        return;
+                    }
+
+                    if (myIntUpDown_B.Value.Value == 0)
+                    {
+                        MessageBox.Show("Set or Place AGM-B first please.");
+                        return;
+                    }
+
+                    UIDocument uidoc = commandData.Application.ActiveUIDocument;
+                    Document doc = uidoc.Document;
+
+                    if (doc.GetElement(new ElementId(myIntUpDown_Middle2.Value.Value)) == null)
+                    {
+                        myBool_Rezero = true;
+                        return;
+                    }
+
+                    myMethod_whichTook_120Hours_OfCoding();
+
+                    myLabel_Progress.Content = "In Progress";
+                    mySlideInProgress = true;
+                    myEE01_Part1_Interpolate.myBool_Cycle = true;
+                    myExternalEvent_EE01_Part1_Interpolate.Raise();
+                }
+            }
+            #region catch and finally
+            catch (Exception ex)
+            {
+                _952_PRLoogleClassLibrary.DatabaseMethods.writeDebug("MyButton_Cycle_Click" + Environment.NewLine + ex.Message + Environment.NewLine + ex.InnerException, true);
+            }
+            finally
+            {
+            }
+            #endregion
+        }
     }
 }
