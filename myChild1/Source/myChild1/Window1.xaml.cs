@@ -242,39 +242,37 @@ namespace myChild1
             }
 
             Transform myEndPointTransform = Transform.Identity;
-            myEndPointTransform.BasisX = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisX); //step 2, extracting rotation
-            myEndPointTransform.BasisY = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisY); //step 2, extracting rotation
-            myEndPointTransform.BasisZ = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisZ); //step 2, extracting rotation
+            myEndPointTransform.BasisX = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisX); //step 1, extration
+            myEndPointTransform.BasisY = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisY); //step 1, extration
+            myEndPointTransform.BasisZ = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisZ); //step 1, extration
 
             Transform myEndPointTransformFor333 = Transform.Identity;
-            myEndPointTransformFor333.BasisX = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisX); //step 2, extracting rotation
-            myEndPointTransformFor333.BasisY = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisY); //step 2, extracting rotation
-            myEndPointTransformFor333.BasisZ = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisZ); //step 2, extracting rotation
-
-            double angle = myEndPointTransform.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, extracting rotation turning into angle
-            double d1_Final = myEndPointTransformFor333.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, extracting rotation turning into angle
-
+            myEndPointTransformFor333.BasisX = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisX); //step 1, extration
+            myEndPointTransformFor333.BasisY = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisY); //step 1, extration
+            myEndPointTransformFor333.BasisZ = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisZ); //step 1, extration
 
             Numerics.Vector3 myQuat = new Numerics.Vector3();
-            myQuat.X = (float)myTransform_FakeBasis33333.BasisZ.X; //step 3, combining z basis 
-            myQuat.Y = (float)myTransform_FakeBasis33333.BasisZ.Y; //step 3, combining z basis 
-            myQuat.Z = (float)myTransform_FakeBasis33333.BasisZ.Z; //step 3, combining z basis 
+            myQuat.X = (float)myTransform_FakeBasis33333.BasisZ.X; //step 2, combining z basis 
+            myQuat.Y = (float)myTransform_FakeBasis33333.BasisZ.Y; //step 2, combining z basis 
+            myQuat.Z = (float)myTransform_FakeBasis33333.BasisZ.Z; //step 2, combining z basis 
 
             Numerics.Vector3 myQuat2 = new Numerics.Vector3();
-            myQuat2.X = (float)myTransform_FakeBasis44444.BasisZ.X; //step 3, combining z basis 
-            myQuat2.Y = (float)myTransform_FakeBasis44444.BasisZ.Y; //step 3, combining z basis 
-            myQuat2.Z = (float)myTransform_FakeBasis44444.BasisZ.Z; //step 3, combining z basis 
+            myQuat2.X = (float)myTransform_FakeBasis44444.BasisZ.X; //step 2, combining z basis 
+            myQuat2.Y = (float)myTransform_FakeBasis44444.BasisZ.Y; //step 2, combining z basis 
+            myQuat2.Z = (float)myTransform_FakeBasis44444.BasisZ.Z; //step 2, combining z basis 
+
+            double angle = myEndPointTransform.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, z normal combining rotation
+            double d1_Final = myEndPointTransformFor333.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, z normal combining rotation
 
             foreach (float myFloat in myListfloat)
             {
-                double myDoubleAlmostThere = (angle * (1 - myFloat)) + (d1_Final * (myFloat)); //step 2, z normal combining rotation
 
-                Numerics.Vector3 myQuat3 = Numerics.Vector3.Lerp(myQuat2, myQuat, myFloat); //step 3, combining z basis 
+                Numerics.Vector3 myQuat3 = Numerics.Vector3.Lerp(myQuat2, myQuat, myFloat); //step 2, combining z basis 
 
                 Transform myTransformFromQuat_Final = Transform.Identity;
                 if (true)
                 {
-                    double aaMega_Quat = XYZ.BasisZ.AngleTo(new XYZ(myQuat3.X, myQuat3.Y, myQuat3.Z));  //step 3, turning it into a Transform
+                    double aaMega_Quat = XYZ.BasisZ.AngleTo(new XYZ(myQuat3.X, myQuat3.Y, myQuat3.Z));  //remember this is about vector not basis
 
                     if (IsZero(aaMega_Quat)) myTransformFromQuat_Final = Transform.Identity;
                     else
@@ -284,7 +282,8 @@ namespace myChild1
                     }
                 }
 
-                Transform myEndPointTransform_JustOnceSide = Transform.CreateRotationAtPoint(myTransformFromQuat_Final.BasisZ, myDoubleAlmostThere, XYZ.Zero); //step 4, bringing it all together 
+                double myDoubleAlmostThere = (angle * (1 - myFloat)) + (d1_Final * (myFloat)); //step 3, z normal combining rotation
+                Transform myEndPointTransform_JustOnceSide = Transform.CreateRotationAtPoint(myTransformFromQuat_Final.BasisZ, myDoubleAlmostThere, XYZ.Zero); //step 3, z normal combining rotation
 
                 Transform myTransformFromQuat_AllNewFinal = Transform.Identity;
                 myTransformFromQuat_AllNewFinal.BasisX = myEndPointTransform_JustOnceSide.OfVector(myTransformFromQuat_Final.BasisX); //step 4, bringing it all together 
