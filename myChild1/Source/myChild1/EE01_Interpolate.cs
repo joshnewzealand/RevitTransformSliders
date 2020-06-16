@@ -62,6 +62,7 @@ namespace myChild1
     {
         public Window1 myWindow1 { get; set; }
         public bool myBool_RunOnce { get; set; }
+        public bool myBool_Cycle { get; set; }
         public static void wait(int milliseconds)
         {
             System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
@@ -103,35 +104,73 @@ namespace myChild1
                 {
                     transGroup.Start("Transform animation");
 
-                    while (myWindow1.mySlideInProgress | myBool_RunOnce == true)
+                    if (myBool_Cycle)
                     {
-                        myBool_RunOnce = false;
-                        wait(100); myIntTimeOut++;
-
-                        if (myDouble_ChangePosition != myWindow1.mySlider_Interpolate.Value)
+                        for (int i = 1; i <= myWindow1.myUpDown_CycleNumber.Value; i++)
                         {
-                            myDouble_ChangePosition = myWindow1.mySlider_Interpolate.Value;
-                            myWindow1.myLabel_ChangeCount.Content = myInt_ChangeCount++.ToString();
-                            using (Transaction y = new Transaction(doc, "a Transform"))
+                            for (int ii = 0; ii <= 24; ii++)
                             {
-                                y.Start();
+                                wait(100);
+                                if (true) //candidate for methodisation 202006141254
+                                {
+                                    if (myDouble_ChangePosition != ii)
+                                    {
+                                        myDouble_ChangePosition = ii;
+                                        myWindow1.myLabel_ChangeCount.Content = myInt_ChangeCount++.ToString();
+                                        using (Transaction y = new Transaction(doc, "a Transform"))
+                                        {
+                                            y.Start();
 
-                                myReferencePoint_Departure.SetCoordinateSystem(myWindow1.myListTransform_Interpolate[(int)myDouble_ChangePosition]);
+                                            myReferencePoint_Departure.SetCoordinateSystem(myWindow1.myListTransform_Interpolate[(int)myDouble_ChangePosition]);
 
-                                y.Commit();
+                                            y.Commit();
+                                        }
+
+                                        myWindow1.setSlider(myWindow1.myIntUpDown_Middle2, myWindow1.mySlider_Rotate_BasisZ, false);
+                                        myWindow1.setSlider(myWindow1.myIntUpDown_Middle2, myWindow1.mySlider_Rotate_BasisX, false);
+                                        myWindow1.setSlider(myWindow1.myIntUpDown_Middle2, myWindow1.mySlider_Rotate_BasisY, true);
+                                    }
+                                }
+                                myWindow1.myLabel_Setting.Content = ii.ToString();
+                            }
+                        }
+                    }
+
+                    if (!myBool_Cycle)
+                    {
+                        while (myWindow1.mySlideInProgress | myBool_RunOnce == true)
+                        {
+                            myBool_RunOnce = false;
+                            wait(100); myIntTimeOut++;
+
+                            if (true) //candidate for methodisation 202006141254
+                            {
+                                if (myDouble_ChangePosition != myWindow1.mySlider_Interpolate.Value)
+                                {
+                                    myDouble_ChangePosition = myWindow1.mySlider_Interpolate.Value;
+                                    myWindow1.myLabel_ChangeCount.Content = myInt_ChangeCount++.ToString();
+                                    using (Transaction y = new Transaction(doc, "a Transform"))
+                                    {
+                                        y.Start();
+
+                                        myReferencePoint_Departure.SetCoordinateSystem(myWindow1.myListTransform_Interpolate[(int)myDouble_ChangePosition]);
+
+                                        y.Commit();
+                                    }
+
+                                    myWindow1.setSlider(myWindow1.myIntUpDown_Middle2, myWindow1.mySlider_Rotate_BasisZ, false);
+                                    myWindow1.setSlider(myWindow1.myIntUpDown_Middle2, myWindow1.mySlider_Rotate_BasisX, false);
+                                    myWindow1.setSlider(myWindow1.myIntUpDown_Middle2, myWindow1.mySlider_Rotate_BasisY, true);
+                                }
                             }
 
-                            myWindow1.setSlider(myWindow1.myIntUpDown_Middle2, myWindow1.mySlider_Rotate_BasisZ, false);
-                            myWindow1.setSlider(myWindow1.myIntUpDown_Middle2, myWindow1.mySlider_Rotate_BasisX, false);
-                            myWindow1.setSlider(myWindow1.myIntUpDown_Middle2, myWindow1.mySlider_Rotate_BasisY, true);
-                        }
+                            myWindow1.myLabel_Setting.Content = myWindow1.mySlider_Interpolate.Value.ToString();
 
-                        myWindow1.myLabel_Setting.Content = myWindow1.mySlider_Interpolate.Value.ToString();
-
-                        if (myIntTimeOut == 400)
-                        {
-                            MessageBox.Show("Timeout");
-                            break;
+                            if (myIntTimeOut == 400)
+                            {
+                                MessageBox.Show("Timeout");
+                                break;
+                            }
                         }
                     }
 
@@ -145,7 +184,7 @@ namespace myChild1
                 _952_PRLoogleClassLibrary.DatabaseMethods.writeDebug("EE01_Part1_Interpolate" + Environment.NewLine + ex.Message + Environment.NewLine + ex.InnerException, true);
             }
             finally
-            { 
+            {
             }
             #endregion
         }
