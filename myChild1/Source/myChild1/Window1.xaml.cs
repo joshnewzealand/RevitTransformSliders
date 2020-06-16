@@ -124,7 +124,7 @@ namespace myChild1
             myExternalEvent_EE06_PlaceFamily = ExternalEvent.Create(myEE06_PlaceFamily);
         }
 
-        
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Properties.Settings.Default.Top = this.Top;
@@ -141,7 +141,7 @@ namespace myChild1
 
         public bool mySelectMethod(Xceed.Wpf.Toolkit.IntegerUpDown myToolKit_IntUpDown) //myToolKit_IntUpDown
         {
-            
+
             UIDocument uidoc = commandData.Application.ActiveUIDocument;
             Document doc = uidoc.Document;
 
@@ -170,12 +170,13 @@ namespace myChild1
             }
             //i am dead keen to get reference pont closer to the useage of the reference oint
             //
-             /*//why was this commented out*/      if (myToolKit_IntUpDown.Value == null) return false;
+            /*//why was this commented out*/
+            if (myToolKit_IntUpDown.Value == null) return false;
             if (myToolKit_IntUpDown.Value.Value == 0) return false;
             if (doc.GetElement(new ElementId(myToolKit_IntUpDown.Value.Value)) == null) return false;
             return true;
         }
-        
+
 
         public static bool IsZero(double a, double tolerance)
         {
@@ -242,37 +243,39 @@ namespace myChild1
             }
 
             Transform myEndPointTransform = Transform.Identity;
-            myEndPointTransform.BasisX = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisX); //step 1, extration
-            myEndPointTransform.BasisY = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisY); //step 1, extration
-            myEndPointTransform.BasisZ = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisZ); //step 1, extration
+            myEndPointTransform.BasisX = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisX); //step 2, extracting rotation
+            myEndPointTransform.BasisY = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisY); //step 2, extracting rotation
+            myEndPointTransform.BasisZ = myTransformFromQuatXX.Inverse.OfVector(myTransform_FakeBasis44444.BasisZ); //step 2, extracting rotation
 
             Transform myEndPointTransformFor333 = Transform.Identity;
-            myEndPointTransformFor333.BasisX = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisX); //step 1, extration
-            myEndPointTransformFor333.BasisY = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisY); //step 1, extration
-            myEndPointTransformFor333.BasisZ = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisZ); //step 1, extration
+            myEndPointTransformFor333.BasisX = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisX); //step 2, extracting rotation
+            myEndPointTransformFor333.BasisY = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisY); //step 2, extracting rotation
+            myEndPointTransformFor333.BasisZ = myTransformFromQuatX.Inverse.OfVector(myTransform_FakeBasis33333.BasisZ); //step 2, extracting rotation
+
+            double angle = myEndPointTransform.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, extracting rotation turning into angle
+            double d1_Final = myEndPointTransformFor333.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, extracting rotation turning into angle
+
 
             Numerics.Vector3 myQuat = new Numerics.Vector3();
-            myQuat.X = (float)myTransform_FakeBasis33333.BasisZ.X; //step 2, combining z basis 
-            myQuat.Y = (float)myTransform_FakeBasis33333.BasisZ.Y; //step 2, combining z basis 
-            myQuat.Z = (float)myTransform_FakeBasis33333.BasisZ.Z; //step 2, combining z basis 
+            myQuat.X = (float)myTransform_FakeBasis33333.BasisZ.X; //step 3, combining z basis 
+            myQuat.Y = (float)myTransform_FakeBasis33333.BasisZ.Y; //step 3, combining z basis 
+            myQuat.Z = (float)myTransform_FakeBasis33333.BasisZ.Z; //step 3, combining z basis 
 
             Numerics.Vector3 myQuat2 = new Numerics.Vector3();
-            myQuat2.X = (float)myTransform_FakeBasis44444.BasisZ.X; //step 2, combining z basis 
-            myQuat2.Y = (float)myTransform_FakeBasis44444.BasisZ.Y; //step 2, combining z basis 
-            myQuat2.Z = (float)myTransform_FakeBasis44444.BasisZ.Z; //step 2, combining z basis 
-
-            double angle = myEndPointTransform.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, z normal combining rotation
-            double d1_Final = myEndPointTransformFor333.BasisX.AngleOnPlaneTo(XYZ.BasisX, -XYZ.BasisZ); //step 3, z normal combining rotation
+            myQuat2.X = (float)myTransform_FakeBasis44444.BasisZ.X; //step 3, combining z basis 
+            myQuat2.Y = (float)myTransform_FakeBasis44444.BasisZ.Y; //step 3, combining z basis 
+            myQuat2.Z = (float)myTransform_FakeBasis44444.BasisZ.Z; //step 3, combining z basis 
 
             foreach (float myFloat in myListfloat)
             {
+                double myDoubleAlmostThere = (angle * (1 - myFloat)) + (d1_Final * (myFloat)); //step 2, z normal combining rotation
 
-                Numerics.Vector3 myQuat3 = Numerics.Vector3.Lerp(myQuat2, myQuat, myFloat); //step 2, combining z basis 
+                Numerics.Vector3 myQuat3 = Numerics.Vector3.Lerp(myQuat2, myQuat, myFloat); //step 3, combining z basis 
 
                 Transform myTransformFromQuat_Final = Transform.Identity;
                 if (true)
                 {
-                    double aaMega_Quat = XYZ.BasisZ.AngleTo(new XYZ(myQuat3.X, myQuat3.Y, myQuat3.Z));  //remember this is about vector not basis
+                    double aaMega_Quat = XYZ.BasisZ.AngleTo(new XYZ(myQuat3.X, myQuat3.Y, myQuat3.Z));  //step 3, turning it into a Transform
 
                     if (IsZero(aaMega_Quat)) myTransformFromQuat_Final = Transform.Identity;
                     else
@@ -282,8 +285,7 @@ namespace myChild1
                     }
                 }
 
-                double myDoubleAlmostThere = (angle * (1 - myFloat)) + (d1_Final * (myFloat)); //step 3, z normal combining rotation
-                Transform myEndPointTransform_JustOnceSide = Transform.CreateRotationAtPoint(myTransformFromQuat_Final.BasisZ, myDoubleAlmostThere, XYZ.Zero); //step 3, z normal combining rotation
+                Transform myEndPointTransform_JustOnceSide = Transform.CreateRotationAtPoint(myTransformFromQuat_Final.BasisZ, myDoubleAlmostThere, XYZ.Zero); //step 4, bringing it all together 
 
                 Transform myTransformFromQuat_AllNewFinal = Transform.Identity;
                 myTransformFromQuat_AllNewFinal.BasisX = myEndPointTransform_JustOnceSide.OfVector(myTransformFromQuat_Final.BasisX); //step 4, bringing it all together 
@@ -344,11 +346,12 @@ namespace myChild1
                         break;
                 }
 
-                if(IsZero(axis.X) & IsZero(axis.Y) & IsZero(axis.Z)  )
+                if (IsZero(axis.X) & IsZero(axis.Y) & IsZero(axis.Z))
                 {
                     myTransformFromQuatXX = myTransform;
 
-                } else
+                }
+                else
                 {
                     myTransformFromQuatXX = Transform.CreateRotationAtPoint(axis, aaMega_QuatXX, XYZ.Zero);
                 }
@@ -359,7 +362,7 @@ namespace myChild1
             myEndPointTransform.BasisY = myTransformFromQuatXX.Inverse.OfVector(myTransform.BasisY);
             myEndPointTransform.BasisZ = myTransformFromQuatXX.Inverse.OfVector(myTransform.BasisZ);
 
-            double myDouble_AngleToXBasis = myEndPointTransform.BasisX.AngleOnPlaneTo(-XYZ.BasisX, XYZ.BasisZ) ; //two places in line, 
+            double myDouble_AngleToXBasis = myEndPointTransform.BasisX.AngleOnPlaneTo(-XYZ.BasisX, XYZ.BasisZ); //two places in line, 
 
             switch (mySlider_temp.Name)
             {
@@ -370,7 +373,7 @@ namespace myChild1
                     myDouble_AngleToXBasis = myEndPointTransform.BasisY.AngleOnPlaneTo(-XYZ.BasisY, XYZ.BasisX); //two places in line, 
                     break;
             }
-            
+
             double myDouble_TurnToVector = myDouble_AngleToXBasis / (Math.PI * 2) * 24;
 
             mySlider_temp.Value = myDouble_TurnToVector;
@@ -384,7 +387,7 @@ namespace myChild1
             }
         }
 
-        
+
         private void mySliderRotate_AGM_B_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             try
@@ -680,7 +683,7 @@ namespace myChild1
             {
                 _952_PRLoogleClassLibrary.DatabaseMethods.writeDebug("mySlider_Rotate_BasisZ_DragStarted" + Environment.NewLine + ex.Message + Environment.NewLine + ex.InnerException, true);
             }
-            finally 
+            finally
             {
             }
             #endregion
@@ -745,7 +748,7 @@ namespace myChild1
         {
             try
             {
-                if(true) //candidate for methodisation 202006061716
+                if (true) //candidate for methodisation 202006061716
                 {
                     myLabel_Progress.Content = "Not in Progress";
 
@@ -771,7 +774,7 @@ namespace myChild1
         {
             try
             {
-               // uidoc.Selection.SetElementIds(new List<ElementId>() { new ElementId(262203) });  //262203  260988   262427
+                // uidoc.Selection.SetElementIds(new List<ElementId>() { new ElementId(262203) });  //262203  260988   262427
 
                 if (!mySelectMethod(myIntUpDown_Middle2)) return;
                 //setSlider(myIntUpDown_A, mySliderNewRotate_X);
@@ -854,7 +857,7 @@ namespace myChild1
                     if (myListFamilySymbol_1738.Count != 1) myBool_RunFamilyLoadEvent = true;
                 }
 
-                if(myBool_RunFamilyLoadEvent) myExternalEvent_EE06_LoadFamily.Raise();
+                if (myBool_RunFamilyLoadEvent) myExternalEvent_EE06_LoadFamily.Raise();
 
 
 
@@ -1150,7 +1153,7 @@ namespace myChild1
             {
                 if (!mySelectMethod(myIntUpDown_Middle2)) return;
 
-               // MessageBox.Show("not getting this far");
+                // MessageBox.Show("not getting this far");
 
                 myToolKit_IntUpDown = myIntUpDown_Middle2;
 
